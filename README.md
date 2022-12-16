@@ -1,5 +1,7 @@
 # Anki Deck of Chinese Poetry (诗词)
 
+![](./wordcloud.png)
+
 ## Aiming
 
 This repository serves as a workspace for cotent collaboration. To download
