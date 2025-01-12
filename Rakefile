@@ -5,7 +5,7 @@ require 'yaml'
 
 Poem = Struct.new(:题目, :朝代, :作者, :诗词, :脚注, :诗注, :小传, :标签) do
   def self.from_yaml_file(file)
-    yaml = YAML.safe_load(File.read(file))
+    yaml = YAML.safe_load_file(file)
     new(
       yaml['题目'], yaml['朝代'], yaml['作者'],
       yaml['诗词'] || [], yaml['脚注'] || [], yaml['诗注'], yaml['小传'], yaml['标签'] || []
@@ -13,7 +13,7 @@ Poem = Struct.new(:题目, :朝代, :作者, :诗词, :脚注, :诗注, :小传,
   end
 
   def initialize(...)
-    super(...)
+    super
 
     preprocess_footnotes
 
