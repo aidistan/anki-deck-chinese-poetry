@@ -22,11 +22,13 @@ For your infomation, following templates are used in the deck:
 ```html
 {{FrontSide}}
 
-<hr id="answer">
+<div id="answer" class="line"></div>
 
 <div id="content">{{诗词}}</div>
 
-<hr>
+<div class="line">
+  <div id="progressbar"></div>
+</div>
 
 <div id="footnotes">
   <div>{{脚注}}</div>
@@ -43,10 +45,13 @@ content.innerHTML = contents.join('')
 var footnotes = document.getElementById('footnotes')
 footnotes.classList = 'hidden'
 
+var progressbar = document.getElementById("progressbar")
+
 var clock = {
   index: 0,
   timer: null,
   ticks: -1,
+  maxTicks: 35,
   click: false,
   tick: function () {
     if (this.timer) {
@@ -54,19 +59,22 @@ var clock = {
       this.timer = null
     }
 
-    if (this.ticks > 35 || this.click === true) {
+    if (this.ticks > this.maxTicks || this.click === true) {
       content.children[this.index].classList = ''
       this.index += 1
       this.ticks = 0
       this.click = false
+      progressbar.style.width = "0%"
     } else {
       this.ticks += 1
+      progressbar.style.width = ((this.ticks - 1) / (this.maxTicks - 1)) * 100 + "%"
     }
 
     if (this.index < contents.length) {
       this.timer = setTimeout(function () { clock.tick() }, 100)
     } else {
       footnotes.classList = ''
+      document.getElementById("timer-visual").style.display = "none"
     }
   }
 }
@@ -104,18 +112,32 @@ html {
   text-align: center;
 }
 
+.line {
+  margin: 1rem 0;
+  width: 100%;
+  height: 1px;
+  background-color: #ccc;
+}
+
 #title {
   font-size: 1.25rem;
   margin-bottom: 1em;
 }
 
 #content {
-  padding: 1rem;
+  margin: 1rem;
   cursor: pointer;
 }
 
 #content > div {
   min-height: 1em; /* for blank lines */
+}
+
+#progressbar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(to right, #f5f5f5, #2c1e1e);
+  transition: width 0.1s linear;
 }
 
 #footnotes {
