@@ -29,8 +29,8 @@ Poem = Struct.new(:题目, :朝代, :作者, :诗词, :脚注, :诗注, :小传,
 
   def to_text_line
     [
-      题目, 朝代, 作者, 诗词, 脚注, 诗注, 小传, 标签,
-      Digest::MD5.hexdigest([题目, 朝代, 作者].join("\t"))
+      Digest::MD5.hexdigest([题目, 朝代, 作者].join("\t")),
+      题目, 朝代, 作者, 诗词, 脚注, 诗注, 小传, 标签
     ].join("\t")
   end
 end
@@ -40,15 +40,20 @@ task :default do
 
   # Add headers
   fout.puts <<~END_OF_DOC
-    #separator:Tab
+    #separator:tab
     #html:true
-    #columns:#{%w[题目 朝代 作者 诗词 脚注 诗注 小传].join("\t")}
-    #tags column:8
-    #guid column:9
+    #columns:#{%w[GUID 题目 朝代 作者 诗词 脚注 诗注 小传 标签].join("\t")}
+    #guid column:1
+    #tags column:9
   END_OF_DOC
 
   # Add poems
   Dir['*/*.yml'].each { fout.puts Poem.from_yaml_file(_1).to_text_line }
 
   fout.close
+
+  # Check duplicated GUIDs
+  guids = File.open('chinese-poetry.txt').readlines.grep_v(/^#/).map { _1.split("\t").first }
+  duplicated_guids = guids.group_by { _1 }.select { |k, v| v.size > 1 }.keys
+  puts "Duplicated GUIDS: #{duplicated_guids}" unless duplicated_guids.empty?
 end
