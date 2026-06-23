@@ -14,7 +14,7 @@ For your infomation, following templates are used in the deck:
 ### Front Template
 
 ```html
-<div id="title">《{{题目}}》— {{朝代}}·{{作者}}</div>
+<div id="cp-title">《{{题目}}》— {{朝代}}·{{作者}}</div>
 ```
 
 ### Back Template
@@ -22,30 +22,30 @@ For your infomation, following templates are used in the deck:
 ```html
 {{FrontSide}}
 
-<div id="answer" class="line"></div>
+<div id="answer" class="cp-hr"></div>
 
-<div id="content">{{诗词}}</div>
+<div id="cp-content">{{诗词}}</div>
 
-<div class="line">
-  <div id="progressbar"></div>
+<div class="cp-hr">
+  <div id="cp-progressbar"></div>
 </div>
 
-<div id="footnotes">
+<div id="cp-footnotes">
   <div>{{脚注}}</div>
   <div>{{诗注}}</div>
   <div>{{小传}}</div>
 </div>
 
 <script>
-var content = document.getElementById('content')
+var content = document.getElementById('cp-content')
 var contents = content.innerHTML.split('<br>').map(function(line) {
   return '<div class="hidden">' + line + '</div>'
 })
 content.innerHTML = contents.join('')
-var footnotes = document.getElementById('footnotes')
+var footnotes = document.getElementById('cp-footnotes')
 footnotes.classList = 'hidden'
 
-var progressbar = document.getElementById("progressbar")
+var progressbar = document.getElementById("cp-progressbar")
 
 var clock = {
   index: 0,
@@ -112,44 +112,44 @@ html {
   text-align: center;
 }
 
-.line {
+.cp-hr {
   margin: 1rem 0;
   width: 100%;
   height: 1px;
   background-color: #ccc;
 }
 
-#title {
+#cp-title {
   font-size: 1.25rem;
   margin-bottom: 1em;
 }
 
-#content {
+#cp-content {
   margin: 1rem;
   cursor: pointer;
 }
 
-#content > div {
+#cp-content > div {
   min-height: 1em; /* for blank lines */
 }
 
-#progressbar {
+#cp-progressbar {
   width: 0%;
   height: 100%;
   background: linear-gradient(to right, #f5f5f5, #2c1e1e);
   transition: width 0.1s linear;
 }
 
-#footnotes {
+#cp-footnotes {
   font-size: 1rem;
   text-align: left;
 }
 
-#footnotes > div {
+#cp-footnotes > div {
   margin-bottom: 1em;
 }
 
-#footnotes ruby rt {
+#cp-footnotes ruby rt {
   font-size: 0.8rem;
 }
 ```
